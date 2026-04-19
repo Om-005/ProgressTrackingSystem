@@ -1,4 +1,6 @@
 // Using fetch for the real API calls
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 export const CATEGORIES = [
   { id: 'dsa', name: 'DSA', color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' },
   { id: 'development', name: 'Development', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20' },
@@ -18,7 +20,7 @@ const request = async (url, options = {}) => {
     ...options.headers,
   };
 
-  const response = await fetch(`/api${url}`, {
+  const response = await fetch(`${API_BASE_URL}/api${url}`, {
     ...options,
     headers,
   });

@@ -24,33 +24,30 @@ app.use((err, req, res, next) => {
 
 // Database connection
 const connectDB = async () => {
-  let uri = process.env.MONGODB_URI;
-  
+  const uri = process.env.MONGODB_URI;
+
+  if (!uri) {
+    console.error('❌ MONGODB_URI environment variable is not set');
+    process.exit(1);
+  }
+
   try {
-    console.log('Attempting to connect to MongoDB...');
-    const conn = await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log('🔄 Attempting to connect to MongoDB...');
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    });
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`\n⚠️ ERROR: ${error.message}`);
-    console.log("⚠️ CLOUD MONGODB CONNECTION BLOCKED BY YOUR WIFI FIREWALL ⚠️");
-    console.log("Automatically falling back to Local In-Memory Database...");
-    
-    try {
-        const { MongoMemoryServer } = require('mongodb-memory-server');
-        const mongoServer = await MongoMemoryServer.create();
-        uri = mongoServer.getUri();
-        await mongoose.connect(uri);
-        console.log(`Local MongoDB Connected`);
-        console.log("Note: Data will reset when you restart the server.");
-    } catch (fallbackError) {
-        console.error(`Failed to start memory server: ${fallbackError.message}`);
-        process.exit(1);
-    }
+    console.error(`❌ MongoDB connection error: ${error.message}`);
+    console.log('💡 Make sure your MongoDB URI is correct and the database is accessible');
+    process.exit(1);
   }
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}\n------------------------------------------------`);
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📡 API available at http://localhost:${PORT}/api`);
   });
 };
 
