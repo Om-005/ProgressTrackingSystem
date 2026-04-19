@@ -1,5 +1,5 @@
 // Using fetch for the real API calls
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://progresstrackingsystem.onrender.com';
 
 export const CATEGORIES = [
   { id: 'dsa', name: 'DSA', color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' },
