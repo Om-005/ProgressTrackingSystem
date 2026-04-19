@@ -1,27 +1,16 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('studyflow-theme');
-    if (saved) return saved === 'dark';
-    return true; // Default to dark mode as per requirements
-  });
-
+  // Always dark mode — no toggle
   useEffect(() => {
-    localStorage.setItem('studyflow-theme', isDarkMode ? 'dark' : 'light');
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('studyflow-theme', 'dark');
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDarkMode: true, toggleTheme: () => {} }}>
       {children}
     </ThemeContext.Provider>
   );

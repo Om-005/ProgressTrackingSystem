@@ -5,13 +5,13 @@ import { cn } from '../../utils/helpers';
 export const Button = React.forwardRef(({ 
   className, variant = 'primary', size = 'md', children, ...props 
 }, ref) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950 disabled:opacity-50 disabled:pointer-events-none";
+  const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/40 focus:ring-offset-2 focus:ring-offset-[#060B18] disabled:opacity-50 disabled:pointer-events-none";
   
   const variants = {
-    primary: "bg-brand-500 text-white hover:bg-brand-600 shadow-sm",
-    secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700",
-    outline: "border border-slate-200 bg-transparent hover:bg-slate-100 text-slate-900 dark:border-slate-800 dark:text-slate-50 dark:hover:bg-slate-800",
-    ghost: "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-50",
+    primary: "bg-gradient-to-r from-[#00E5FF] to-[#7B61FF] text-white hover:brightness-110 shadow-lg shadow-[#00E5FF]/15",
+    secondary: "bg-white/[0.06] text-slate-200 hover:bg-white/[0.1] border border-white/[0.08]",
+    outline: "border border-white/[0.1] bg-transparent hover:bg-white/[0.05] text-slate-200",
+    ghost: "bg-transparent hover:bg-white/[0.06] text-slate-300 hover:text-white",
   };
   
   const sizes = {

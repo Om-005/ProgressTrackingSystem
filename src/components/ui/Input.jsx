@@ -6,10 +6,11 @@ export const Input = React.forwardRef(({ className, type, ...props }, ref) => {
     <input
       type={type}
       className={cn(
-        "flex h-10 w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:focus:ring-brand-500",
+        "flex h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/20 focus:border-[#00E5FF]/40 hover:border-white/[0.15] disabled:cursor-not-allowed disabled:opacity-50 transition-all",
         className
       )}
       ref={ref}
+      style={{ colorScheme: 'dark' }}
       {...props}
     />
   );

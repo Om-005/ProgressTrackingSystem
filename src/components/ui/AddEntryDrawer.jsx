@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 import { useStudyData } from '../../contexts/StudyDataContext';
-import { Card, CardContent } from './Card';
 import { Input } from './Input';
-import { Button } from './Button';
 import { Trophy, CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const STYLES = `
+  .sf-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-weight: 800; }
+  .sf-mono    { font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; }
+`;
+
+const DOT_COLORS = {
+  'dsa': '#10B981',
+  'development': '#00E5FF',
+  'cs-core': '#7B61FF',
+  'ai-ml': '#F43F5E',
+  'learning': '#FF9500',
+};
 
 export const AddEntryDrawer = ({ isOpen, onClose }) => {
   const { addLog, stats, goal, CATEGORIES } = useStudyData();
@@ -16,9 +27,6 @@ export const AddEntryDrawer = ({ isOpen, onClose }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
-
-  // Close drawer if celebration completes or just let user manually close it? 
-  // Based on requirement: "add a satisfying Success animation upon submission"
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,12 +76,13 @@ export const AddEntryDrawer = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <>
+          <style>{STYLES}</style>
           {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex justify-end"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-end"
             onClick={onClose}
           />
           
@@ -83,32 +92,41 @@ export const AddEntryDrawer = ({ isOpen, onClose }) => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 bottom-0 right-0 w-full max-w-md bg-background-light dark:bg-background-dark shadow-2xl z-50 overflow-y-auto border-l border-slate-200 dark:border-slate-800"
+            className="fixed top-0 bottom-0 right-0 w-full max-w-md shadow-2xl z-50 overflow-y-auto"
+            style={{ background: '#060B18', borderLeft: '1px solid rgba(255,255,255,0.07)' }}
           >
             <div className="p-6 h-full flex flex-col">
+              {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight">Add Entry</h2>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Log your focus session</p>
+                  <div className="sf-mono" style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(0,229,255,0.6)', marginBottom: 4 }}>
+                    NEW SESSION
+                  </div>
+                  <h2 className="sf-display text-white text-2xl font-bold tracking-tight">Add Entry</h2>
                 </div>
-                <Button variant="ghost" size="sm" onClick={onClose} className="rounded-full h-10 w-10 p-0 hover:bg-slate-200 dark:hover:bg-slate-800">
+                <button 
+                  onClick={onClose} 
+                  className="rounded-full h-10 w-10 flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.06] transition-colors"
+                >
                   <X size={20} />
-                </Button>
+                </button>
               </div>
 
+              {/* Celebration */}
               <AnimatePresence>
                 {showCelebration && (
                   <motion.div 
                     initial={{ opacity: 0, scale: 0.9, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="mb-6 bg-gradient-to-r from-emerald-500 to-green-400 rounded-xl p-5 text-white shadow-lg flex items-center gap-4"
+                    className="mb-6 rounded-xl p-5 text-white shadow-lg flex items-center gap-4"
+                    style={{ background: 'linear-gradient(135deg, #00D68F, #00E5FF)', boxShadow: '0 4px 30px rgba(0,214,143,0.3)' }}
                   >
                     <div className="bg-white/20 p-2 rounded-full">
                       <Trophy size={28} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold">Daily Goal Hit! 🎉</h3>
+                      <h3 className="text-lg font-bold sf-display">Daily Goal Hit! 🎉</h3>
                       <p className="text-sm opacity-90">Outstanding work today.</p>
                     </div>
                   </motion.div>
@@ -118,41 +136,49 @@ export const AddEntryDrawer = ({ isOpen, onClose }) => {
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
                 <div className="space-y-6 flex-1">
                   
-                  {/* Category Selection (Pills) */}
+                  {/* Category Selection */}
                   <div className="space-y-3">
-                    <label className="text-sm font-medium">Category</label>
+                    <label className="text-sm font-semibold text-slate-300">Category</label>
                     <div className="flex flex-wrap gap-2">
-                       {CATEGORIES.map(cat => (
+                       {CATEGORIES.map(cat => {
+                         const color = DOT_COLORS[cat.id] || '#6366f1';
+                         const isActive = formData.category === cat.id;
+                         return (
                            <button
                              type="button"
                              key={cat.id}
                              onClick={() => setFormData(prev => ({ ...prev, category: cat.id }))}
-                             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                                 formData.category === cat.id 
-                                 ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20 scale-105' 
-                                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
-                             }`}
+                             className="px-3 py-1.5 rounded-full text-xs font-bold transition-all sf-mono tracking-wider"
+                             style={isActive 
+                               ? { background: `${color}22`, color: color, border: `1px solid ${color}55`, boxShadow: `0 0 12px ${color}20` }
+                               : { background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid rgba(255,255,255,0.06)' }
+                             }
                            >
-                              {cat.name}
+                             {cat.name.toUpperCase()}
                            </button>
-                       ))}
+                         );
+                       })}
                     </div>
                   </div>
 
+                  {/* Date */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Date</label>
-                    <Input 
+                    <label className="text-sm font-semibold text-slate-300">Date</label>
+                    <input 
                       type="date" 
                       name="date"
                       value={formData.date}
                       onChange={handleChange}
                       required
+                      className="w-full bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15] focus:border-[#00E5FF]/40 rounded-xl px-4 py-3 text-sm text-white outline-none transition-all focus:ring-2 focus:ring-[#00E5FF]/20"
+                      style={{ colorScheme: 'dark' }}
                     />
                   </div>
 
+                  {/* Hours */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Hours Studied</label>
-                    <Input 
+                    <label className="text-sm font-semibold text-slate-300">Hours Studied</label>
+                    <input 
                       type="number" 
                       step="0.5"
                       min="0.5"
@@ -162,41 +188,54 @@ export const AddEntryDrawer = ({ isOpen, onClose }) => {
                       value={formData.hours}
                       onChange={handleChange}
                       required
+                      className="w-full bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15] focus:border-[#00E5FF]/40 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 outline-none transition-all focus:ring-2 focus:ring-[#00E5FF]/20"
                     />
                   </div>
 
+                  {/* Notes */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">What did you learn? (Optional)</label>
+                    <label className="text-sm font-semibold text-slate-300">What did you learn? (Optional)</label>
                     <textarea 
                       name="notes"
                       placeholder="Note down key takeaways..."
                       value={formData.notes}
                       onChange={handleChange}
-                      className="w-full flex min-h-[100px] h-24 rounded-md border border-slate-200 dark:border-slate-800 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50 resize-none transition-colors"
+                      className="w-full min-h-[100px] h-24 bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15] focus:border-[#00E5FF]/40 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 outline-none transition-all focus:ring-2 focus:ring-[#00E5FF]/20 resize-none"
                     />
                   </div>
 
-                  <div className="glass-panel p-4 rounded-xl">
-                     <div className="flex justify-between text-sm mb-2">
-                        <span className="font-medium">Goal Progress</span>
-                        <span className="text-slate-500 dark:text-slate-400">{stats?.todayHours || 0} / {goal} hrs</span>
-                     </div>
-                     <div className="h-2.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                       <div className="h-full bg-gradient-to-r from-brand-400 to-accent-500 rounded-full transition-all duration-700" style={{ width: `${progress}%` }} />
-                     </div>
+                  {/* Goal Progress */}
+                  <div 
+                    className="rounded-xl p-4"
+                    style={{ background: 'rgba(0,229,255,0.04)', border: '1px solid rgba(0,229,255,0.1)' }}
+                  >
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="font-semibold text-slate-300">Goal Progress</span>
+                      <span className="sf-mono text-[#00E5FF]" style={{ fontSize: 12 }}>{stats?.todayHours || 0} / {goal} hrs</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-full rounded-full transition-all duration-700" style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #00E5FF, #7B61FF)' }} />
+                    </div>
                   </div>
 
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-slate-200 dark:border-slate-800">
-                  <Button type="submit" className="w-full relative group overflow-hidden" size="lg" disabled={isSubmitting}>
+                {/* Submit */}
+                <div className="pt-6 mt-6 border-t border-white/[0.06]">
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full relative group flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm text-white overflow-hidden transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ background: 'linear-gradient(135deg, #00E5FF, #7B61FF)', boxShadow: '0 4px 20px rgba(0,229,255,0.2)' }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
                     {isSubmitting ? 'Saving...' : (
-                       <span className="flex items-center justify-center">
-                         <CheckCircle2 size={18} className="mr-2 group-hover:scale-110 transition-transform" />
-                         Save Entry
-                       </span>
+                      <span className="flex items-center justify-center">
+                        <CheckCircle2 size={18} className="mr-2 group-hover:scale-110 transition-transform" />
+                        Save Entry
+                      </span>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </div>

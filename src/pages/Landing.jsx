@@ -229,7 +229,7 @@ export default function Landing() {
             transition={{ delay: 0.45, duration: 0.6 }}
             className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10 font-light"
           >
-            Log hours, track streaks, analyze patterns. StudyFlow turns your grind into visible, 
+            Log hours, track streaks, analyze patterns. StudyFlow turns your grind into visible,
             measurable progress — one session at a time.
           </motion.p>
 
@@ -265,7 +265,7 @@ export default function Landing() {
         >
           {/* Glow behind card */}
           <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/20 to-purple-600/10 blur-3xl rounded-3xl scale-95" />
-          
+
           <div className="relative bg-white/[0.04] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl">
             {/* Mock header bar */}
             <div className="flex items-center gap-2 mb-4">
@@ -439,7 +439,7 @@ export default function Landing() {
             {/* Decorative orbs */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2" />
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2" />
-            
+
             <BookOpen className="text-indigo-400 mx-auto mb-6" size={40} />
             <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
               Your next streak starts today.

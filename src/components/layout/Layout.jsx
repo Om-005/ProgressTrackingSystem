@@ -13,11 +13,11 @@ export const Layout = () => {
   return (
     <ThemeProvider>
       <StudyDataProvider>
-        <div className="flex h-screen bg-transparent overflow-hidden text-slate-900 dark:text-slate-50">
+        <div className="flex h-screen overflow-hidden" style={{ background: '#060B18' }}>
           {/* Mobile sidebar overlay */}
           {sidebarOpen && (
             <div 
-              className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setSidebarOpen(false)}
             />
           )}
@@ -40,7 +40,7 @@ export const Layout = () => {
               onAddClick={() => setIsAddEntryOpen(true)}
             />
             
-            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-transparent relative">
+            <main className="flex-1 overflow-x-hidden overflow-y-auto relative" style={{ background: '#060B18' }}>
               <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl relative z-10">
                 <Outlet />
               </div>

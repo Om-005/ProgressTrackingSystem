@@ -4,7 +4,8 @@ import { cn } from '../../utils/helpers';
 export const LoadingSkeleton = ({ className, ...props }) => {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-slate-200 dark:bg-slate-800", className)}
+      className={cn("animate-pulse rounded-xl", className)}
+      style={{ background: 'rgba(255,255,255,0.04)' }}
       {...props}
     />
   );

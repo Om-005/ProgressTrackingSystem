@@ -1,31 +1,38 @@
 import React from 'react';
-import { Menu, Moon, Sun, Plus, LogOut } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { Menu, Plus, LogOut } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Button } from '../ui/Button';
 
 export const Header = ({ onMenuClick, onAddClick }) => {
-  const { isDarkMode, toggleTheme } = useTheme();
   const { logout } = useAuth();
 
   return (
-    <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
+    <header 
+      className="h-16 border-b border-white/[0.06] sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6"
+      style={{ background: 'rgba(8,14,30,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div className="flex items-center lg:hidden">
-        <Button variant="ghost" size="sm" onClick={onMenuClick} className="mr-2">
+        <button 
+          onClick={onMenuClick} 
+          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors mr-2"
+        >
           <Menu size={20} />
-        </Button>
+        </button>
       </div>
       
       <div className="flex items-center justify-end w-full space-x-2">
-        <Button variant="ghost" size="sm" onClick={onAddClick} className="lg:hidden text-brand-600 dark:text-brand-400">
+        <button 
+          onClick={onAddClick} 
+          className="lg:hidden p-2 rounded-lg text-[#00E5FF] hover:bg-[#00E5FF]/10 transition-colors"
+        >
           <Plus size={20} />
-        </Button>
-        <Button variant="ghost" size="sm" onClick={toggleTheme} aria-label="Toggle theme">
-          {isDarkMode ? <Sun size={20} className="text-amber-500" /> : <Moon size={20} className="text-slate-700 dark:text-slate-300" />}
-        </Button>
-        <Button variant="ghost" size="sm" onClick={logout} aria-label="Log out" className="text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+        </button>
+        <button 
+          onClick={logout} 
+          aria-label="Log out" 
+          className="p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+        >
           <LogOut size={20} />
-        </Button>
+        </button>
       </div>
     </header>
   );
