@@ -54,10 +54,31 @@ export const StudyDataProvider = ({ children }) => {
     await fetchData();
   };
 
+  const updateTask = async (id, data) => {
+    await api.updateTask(id, data);
+    await fetchData();
+  };
+
+  const deleteTask = async (id) => {
+    await api.deleteTask(id);
+    await fetchData();
+  };
+
+  const updateLog = async (id, data) => {
+    await api.updateLog(id, data);
+    await fetchData();
+  };
+
+  const deleteLog = async (id) => {
+    await api.deleteLog(id);
+    await fetchData();
+  };
+
   return (
     <StudyDataContext.Provider value={{ 
         logs, tasks, insights, stats, loading, 
         addLog, addTask, toggleTask, 
+        updateTask, deleteTask, updateLog, deleteLog,
         goal, setGoal, CATEGORIES 
     }}>
       {children}

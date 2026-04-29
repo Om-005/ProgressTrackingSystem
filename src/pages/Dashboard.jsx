@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
-import { Clock, Flame, Activity, Award, BookOpen, TrendingUp, Zap, Target } from 'lucide-react';
+import { Clock, Flame, Activity, Award, BookOpen, TrendingUp, Zap, Target, Pencil, Check, X } from 'lucide-react';
 import { useStudyData } from '../contexts/StudyDataContext';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton';
@@ -191,7 +191,9 @@ function StatCard({ label, value, unit = '', icon, colorClass = 'sf-num-teal', c
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export const Dashboard = () => {
-  const { logs, stats, loading, CATEGORIES, goal } = useStudyData();
+  const { logs, stats, loading, CATEGORIES, goal, setGoal } = useStudyData();
+  const [editingGoal, setEditingGoal] = useState(false);
+  const [tempGoal, setTempGoal] = useState(goal);
 
   const weeklyData = useMemo(() => {
     const map = {};
@@ -278,11 +280,57 @@ export const Dashboard = () => {
                 </div>
               </div>
               <div>
-                <div className="sf-label mb-1">Daily Goal</div>
-                <div className="sf-mono" style={{ fontSize: 22, fontWeight: 700, color: '#fff', lineHeight: 1 }}>{todayHrs.toFixed(1)}<span style={{ color: 'rgba(148,163,184,0.6)', fontSize: 13 }}>/{goal}h</span></div>
-                <div className="sf-label mt-1" style={{ color: todayPct >= 100 ? '#00D68F' : 'rgba(148,163,184,0.5)' }}>
-                  {todayPct >= 100 ? '✓ ACHIEVED' : `${(goal - stats.todayHours).toFixed(1)}h remaining`}
+                <div className="sf-label mb-1 flex items-center gap-2">
+                  Daily Goal
+                  {!editingGoal && (
+                    <button
+                      onClick={() => { setEditingGoal(true); setTempGoal(goal); }}
+                      className="text-slate-500 hover:text-[#00E5FF] transition-colors p-0.5 rounded"
+                      title="Edit daily goal"
+                    >
+                      <Pencil size={11} />
+                    </button>
+                  )}
                 </div>
+                {editingGoal ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min="0.5"
+                      max="24"
+                      step="0.5"
+                      value={tempGoal}
+                      onChange={e => setTempGoal(parseFloat(e.target.value) || 0)}
+                      autoFocus
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') { setGoal(tempGoal); setEditingGoal(false); }
+                        if (e.key === 'Escape') setEditingGoal(false);
+                      }}
+                      className="w-16 bg-white/[0.08] border border-[#00E5FF]/30 rounded-lg px-2 py-1 text-sm text-white outline-none focus:ring-1 focus:ring-[#00E5FF]/30 sf-mono"
+                      style={{ fontWeight: 700 }}
+                    />
+                    <span className="text-slate-500 text-xs">hrs</span>
+                    <button
+                      onClick={() => { setGoal(tempGoal); setEditingGoal(false); }}
+                      className="text-[#00D68F] hover:scale-110 transition-transform p-0.5"
+                    >
+                      <Check size={14} />
+                    </button>
+                    <button
+                      onClick={() => setEditingGoal(false)}
+                      className="text-slate-500 hover:text-slate-300 transition-colors p-0.5"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="sf-mono" style={{ fontSize: 22, fontWeight: 700, color: '#fff', lineHeight: 1 }}>{todayHrs.toFixed(1)}<span style={{ color: 'rgba(148,163,184,0.6)', fontSize: 13 }}>/{goal}h</span></div>
+                    <div className="sf-label mt-1" style={{ color: todayPct >= 100 ? '#00D68F' : 'rgba(148,163,184,0.5)' }}>
+                      {todayPct >= 100 ? '✓ ACHIEVED' : `${(goal - stats.todayHours).toFixed(1)}h remaining`}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -46,11 +46,29 @@ export const api = {
     body: JSON.stringify(log),
   }),
 
+  updateLog: (id, log) => request(`/logs/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(log),
+  }),
+
+  deleteLog: (id) => request(`/logs/${id}`, {
+    method: 'DELETE',
+  }),
+
   getTasks: () => request('/tasks'),
 
   addTask: (task) => request('/tasks', {
     method: 'POST',
     body: JSON.stringify(task),
+  }),
+
+  updateTask: (id, data) => request(`/tasks/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+
+  deleteTask: (id) => request(`/tasks/${id}`, {
+    method: 'DELETE',
   }),
 
   toggleTask: (id) => request(`/tasks/${id}/toggle`, {
